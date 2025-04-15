@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+<div class="cont-huerto">
+    <!-- Formulario para agregar nuevo huerto y plantaciones -->
+    <h2 class="cont-huerto.h2">Nuevo Huerto</h2>
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Datos del Huerto</legend>
+            {{ huerto_form.as_p }}
+        </fieldset>
+
+        <fieldset>
+            <legend>Plantaciones</legend>
+            {{ plantacion_formset.management_form }}
+            {% for form in plantacion_formset %}
+                <div class="plantacion-form">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <button type="submit" class="btn btn-success">Agregar Huerto</button>
+    </form>
+</div>
+{% endblock %}

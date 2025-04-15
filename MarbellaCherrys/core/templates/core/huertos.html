@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="cont-huerto">
+    <h1 style="color: #8b0000;">Gestión de Huertos</h1>
+    <a href="{% url 'agregar_huertos' %}"  style="text-decoration: none;" class="btn">Nuevo Huerto</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Ubicación</th>
+                <th>Hectarias</th>
+                <th>Variedades</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for huerto in huertos %}
+            <tr>
+                <td>{{ huerto.id }}</td>
+                <td>{{ huerto.nombre }}</td>
+                <td><a target="_blank" href="{{huerto.ubicacion}}">{{ huerto.nombre_ubicacion }}</a></td>
+                <td>{{ huerto.hcta_total }}</td>
+                <td>
+                    {% if huerto.plantaciones.all %}
+                        {{ huerto.plantaciones.all|join:", " }}
+                    {% else %}
+                        <em>No hay plantaciones</em>
+                    {% endif %}
+                </td>
+                <td><button class="btn">Editar</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
