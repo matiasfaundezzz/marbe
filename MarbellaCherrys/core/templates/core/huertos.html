@@ -1,8 +1,8 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="cont-huerto">
-    <h1 style="color: #8b0000;">Gestión de Huertos</h1>
+<div class="form-container">
+    <h2>Gestión de Huertos</h2>
     <a href="{% url 'agregar_huertos' %}"  style="text-decoration: none;" class="btn">Nuevo Huerto</a>
 
     <table>
@@ -30,7 +30,7 @@
                         <em>No hay plantaciones</em>
                     {% endif %}
                 </td>
-                <td><button class="btn">Editar</button></td>
+                <td><a>Editar</a></td>
             </tr>
             {% endfor %}
         </tbody>

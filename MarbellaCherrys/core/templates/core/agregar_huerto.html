@@ -1,28 +1,148 @@
 {% extends 'core/base.html' %}
 
-
+{% load static %}
 {% block content %}
-<div class="cont-huerto">
-    <!-- Formulario para agregar nuevo huerto y plantaciones -->
-    <h2 class="cont-huerto.h2">Nuevo Huerto</h2>
-    <form method="post">
+<head>
+    <link rel="stylesheet" href="{% static 'core/style_fomrs.css' %}">
+</head>
+<style>
+    /* Oculta el checkbox y su label */
+    input[name$="-DELETE"], label[for$="-DELETE"] {
+        display: none;
+    }
+</style>
+<div class="form-container">
+    <h2>Nuevo Huerto</h2>
+    <form method="post" id="huerto-form" class="modern-form">
         {% csrf_token %}
-        <fieldset>
-            <legend>Datos del Huerto</legend>
-            {{ huerto_form.as_p }}
-        </fieldset>
-
-        <fieldset>
-            <legend>Plantaciones</legend>
-            {{ plantacion_formset.management_form }}
-            {% for form in plantacion_formset %}
-                <div class="plantacion-form">
-                    {{ form.as_p }}
+        
+        <!-- Sección Datos del Huerto -->
+        <fieldset class="form-section">
+            <legend class="section-title">Datos del Huerto</legend>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="{{ huerto_form.nombre.id_for_label }}">Nombre:</label>
+                    {{ huerto_form.nombre }}
                 </div>
-            {% endfor %}
+                <div class="form-group">
+                    <label for="{{ huerto_form.hcta_total.id_for_label }}">Hcta total:</label>
+                    {{ huerto_form.hcta_total }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ huerto_form.nombre_ubicacion.id_for_label }}">Nombre ubicación:</label>
+                    {{ huerto_form.nombre_ubicacion }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ huerto_form.ubicacion.id_for_label }}">Ubicación:</label>
+                    {{ huerto_form.ubicacion }}
+                </div>
+            </div>
         </fieldset>
 
-        <button type="submit" class="btn btn-success">Agregar Huerto</button>
+        <!-- Sección Plantaciones -->
+        <fieldset class="form-section">
+            <legend class="section-title">Plantaciones</legend>
+            {{ plantacion_formset.management_form }}
+            <div id="plantaciones-forms">
+                {% for form in plantacion_formset %}
+                <div class="plantacion-form {% if not forloop.first %}plantacion-separada{% endif %}">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="{{ form.variedad.id_for_label }}">Variedad:</label>
+                            {{ form.variedad }}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.hcta_total.id_for_label }}">Hcta total:</label>
+                            {{ form.hcta_total }}
+                        </div>
+                    </div>
+                    {% if not forloop.first %}
+                    <div class="form-actions">
+                        <button type="button" class="btn-delete" onclick="eliminarPlantacion(this)">
+                            <i class="fas fa-trash"></i> Eliminar esta plantación
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-actions">
+                <button type="button" id="add-plantacion" class="btn-secondary">
+                    <i class="fas fa-plus"></i> Agregar otra plantación
+                </button>
+            </div>
+        </fieldset>
+
+        <div class="form-actions main-actions">
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Agregar Huerto
+            </button>
+        </div>
     </form>
 </div>
+
+<!-- Incluir Font Awesome para íconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Función para actualizar índices de formularios
+    function updateFormIndices() {
+        let forms = $('.plantacion-form');
+        $('#id_plantaciones-TOTAL_FORMS').val(forms.length);
+        
+        forms.each(function(i) {
+            $(this).find(':input').each(function() {
+                let name = $(this).attr('name').replace(/-\d+-/, '-' + i + '-');
+                let id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id});
+            });
+        });
+    }
+
+    // Agregar nueva plantación
+    $('#add-plantacion').click(function() {
+        let newForm = $('.plantacion-form:first').clone(true);
+        
+        // Limpiar valores
+        newForm.find('input, select').val('');
+        
+        // Agregar botón de eliminar
+        newForm.find('.form-actions').remove();
+        newForm.append(`
+            <div class="form-actions">
+                <button type="button" class="btn-delete" onclick="eliminarPlantacion(this)">
+                    <i class="fas fa-trash"></i> Eliminar esta plantación
+                </button>
+            </div>
+        `);
+        
+        // Agregar separador
+        newForm.addClass('plantacion-separada');
+        
+        // Agregar al contenedor
+        $('#plantaciones-forms').append(newForm);
+        updateFormIndices();
+    });
+});
+
+// Eliminar plantación (asegurando que quede al menos una)
+function eliminarPlantacion(btn) {
+    let forms = $('.plantacion-form');
+    if (forms.length > 1) {
+        $(btn).closest('.plantacion-form').remove();
+        
+        // Actualizar índices
+        let totalForms = $('#id_plantaciones-TOTAL_FORMS');
+        totalForms.val(parseInt(totalForms.val()) - 1);
+        updateFormIndices();
+        
+        // Asegurar que el primer formulario no tenga botón de eliminar
+        $('.plantacion-form:first .btn-delete').remove();
+    } else {
+        alert('Debe haber al menos una plantación.');
+    }
+}
+</script>
 {% endblock %}

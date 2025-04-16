@@ -31,9 +31,7 @@ def huerto_list_create(request):
             plantacion_formset = PlantacionFormSet(request.POST, instance=nuevo_huerto)
             if plantacion_formset.is_valid():
                 plantacion_formset.save()
-                return redirect("huerto_list_create")  
-        else:
-            plantacion_formset = PlantacionFormSet(request.POST)
+                return redirect("huertos")
     else:
         huerto_form = HuertoForm()
         plantacion_formset = PlantacionFormSet()
