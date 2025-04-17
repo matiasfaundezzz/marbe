@@ -12,7 +12,12 @@
     }
 </style>
 <div class="form-container">
-    <h2>Nuevo Huerto</h2>
+    <div class="dashboard-header">
+        <h2>Nuevo Huerto</h2>
+        <a href="{% url 'huertos' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a Huertos
+        </a>
+    </div>
     <form method="post" id="huerto-form" class="modern-form">
         {% csrf_token %}
         

@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
-from core.models import Huerto
+from core.models import Huerto, Plantacion
 from .forms import HuertoForm, PlantacionFormSet
 
 def index(request):
@@ -44,6 +44,32 @@ def huerto_list_create(request):
 
     return render(request, "core/agregar_huerto.html", {
         "huertos": huertos,
+        "huerto_form": huerto_form,
+        "plantacion_formset": plantacion_formset,
+    })
+
+
+def detalle_huerto(request, huerto_id):
+    huerto = get_object_or_404(Huerto.objects.prefetch_related('plantaciones'), id=huerto_id)
+    return render(request, 'core/ver_huerto.html', {'huerto': huerto})
+
+def editar_huerto(request, huerto_id):
+    huerto = get_object_or_404(Huerto, id=huerto_id)
+    
+    if request.method == "POST":
+        huerto_form = HuertoForm(request.POST, instance=huerto)
+        plantacion_formset = PlantacionFormSet(request.POST, instance=huerto)
+        
+        if huerto_form.is_valid() and plantacion_formset.is_valid():
+            huerto_form.save()
+            plantacion_formset.save()
+            return redirect('detalle_huerto', huerto_id=huerto.id)
+    else:
+        huerto_form = HuertoForm(instance=huerto)
+        plantacion_formset = PlantacionFormSet(instance=huerto)
+    
+    return render(request, "core/editar_huerto.html", {
+        "huerto": huerto,
         "huerto_form": huerto_form,
         "plantacion_formset": plantacion_formset,
     })
