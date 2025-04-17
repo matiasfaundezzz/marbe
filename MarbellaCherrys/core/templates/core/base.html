@@ -10,149 +10,111 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'core/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body>
-  <div class="app-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="logo">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-            <path d="M20.91 8.84 8.56 2.23a1.93 1.93 0 0 0-1.81 0L3.1 4.13a2.12 2.12 0 0 0-.05 3.69l12.22 6.93a2 2 0 0 0 1.94 0L21 12.51a2.12 2.12 0 0 0-.09-3.67Z"></path>
-            <path d="m3.09 8.84 12.35-6.61a1.93 1.93 0 0 1 1.81 0l3.65 1.9a2.12 2.12 0 0 1 .1 3.69L8.73 14.75a2 2 0 0 1-1.94 0L3 12.51a2.12 2.12 0 0 1 .09-3.67Z"></path>
-            <line x1="12" y1="22" x2="12" y2="13"></line>
-            <path d="M20 13.5v3.37a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13.5"></path>
-          </svg>
-          <span>FUNDO</span>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo" id="logoExpand">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+              <path d="M20.91 8.84 8.56 2.23a1.93 1.93 0 0 0-1.81 0L3.1 4.13a2.12 2.12 0 0 0-.05 3.69l12.22 6.93a2 2 0 0 0 1.94 0L21 12.51a2.12 2.12 0 0 0-.09-3.67Z"></path>
+              <path d="m3.09 8.84 12.35-6.61a1.93 1.93 0 0 1 1.81 0l3.65 1.9a2.12 2.12 0 0 1 .1 3.69L8.73 14.75a2 2 0 0 1-1.94 0L3 12.51a2.12 2.12 0 0 1 .09-3.67Z"></path>
+              <line x1="12" y1="22" x2="12" y2="13"></line>
+              <path d="M20 13.5v3.37a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13.5"></path>
+            </svg>
+            <span>FUNDO</span>
+          </div>
+          <button class="sidebar-toggle" id="sidebarToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
         </div>
-        <button class="sidebar-toggle" id="sidebarToggle">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-        </button>
-      </div>
-      <div class="sidebar-content">
-        <nav class="sidebar-menu">
-          <ul>
-            <li class="{% if request.path == '/' %}active{% endif %}">
-              <a href="{% url 'index' %}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-                <span>Inicio</span>
-              </a>
-            </li>
-            <li class="{% if request.path == '/huertos/' %}active{% endif %}">
-              <a href="{% url 'huertos' %}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                    <circle cx="7" cy="13" r="3"></circle>
-                    <circle cx="17" cy="13" r="3"></circle>
-                    <path d="M7 13V9c0-3 2-5 5-5h0c3 0 5 2 5 5v4"></path>
-                    <path d="M12 4c0-1.5.5-2 2-2"></path>
-                  </svg>
-                <span>Huertos</span>
-              </a>
-            </li>
-            <li  class="{% if request.path == '/maestroinsumo/' %}active{% endif %}">
-              <a href="{% url 'maestroinsumo' %} ">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                    <path d="M8 3h8l1 3h-10l1-3z"></path>
-                    <path d="M7 6h10v12a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2V6z"></path>
-                    <path d="M12 6v14" stroke-dasharray="1 2"></path>
-                    <path d="M17 9h3v3"></path>
-                    <path d="M20 12c0 3-2 5-5 7"></path>
-                    <path d="M10 16c-1 0-2 1-2 2"></path>
-                  </svg>
-                <span>Maestros Insumos</span>
-              </a>
-            </li>
-            <li class="{% if request.path == '/maestroherrero/' %}active{% endif %}">
-              <a href="{% url 'maestroherrero' %}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                    <path d="M14 14l-8.5 8.5a1 1 0 0 1-1.41-1.41L12.59 12.6"></path>
-                    <path d="M18 10l-4 4"></path>
-                    <path d="M15.75 6.25l2 2"></path>
-                    <path d="M19.25 9.75l-2-2C15.54 6.04 15.27 4 13.5 2.5L13 2l-1 1 0.5 0.5c1.5 1.77 3.54 2.04 5.25 3.75l2 2 1-1-0.5-0.5z"></path>
-                    <rect x="13" y="7.5" width="7" height="7" rx="1" transform="rotate(45 13 7.5)"></rect>
-                  </svg>
-                <span>Maestros Herrero</span>
-              </a>
-            </li>
-            <li class="{% if request.path == '/inventario/' %}active{% endif %}">
+        <div class="sidebar-content">
+          <nav class="sidebar-menu">
+            <ul>
+              <li class="{% if request.path == '/' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                  <i class="fas fa-home icon"></i>
+                  <span>Inicio</span>
+                </a>
+              </li>
+              <li class="{% if request.path == '/huertos/' %}active{% endif %}">
+                <a href="{% url 'huertos' %}">
+                  <i class="fas fa-tree icon"></i>
+                  <span>Huertos</span>
+                </a>
+              </li>
+              <li class="{% if request.path == '/maestroinsumo/' %}active{% endif %}">
+                <a href="{% url 'maestroinsumo' %}">
+                  <i class="fas fa-boxes icon"></i>
+                  <span>Maestros Insumos</span>
+                </a>
+              </li>
+              <li class="{% if request.path == '/maestroherrero/' %}active{% endif %}">
+                <a href="{% url 'maestroherrero' %}">
+                  <i class="fas fa-tools icon"></i>
+                  <span>Maestros Herrero</span>
+                </a>
+              </li>
+              <li class="{% if request.path == '/inventario/' %}active{% endif %}">
                 <a href="{% url 'inventario' %}">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                    <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                    <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                    <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                    <line x1="6" y1="18" x2="6.01" y2="18"></line>
-                  </svg>
+                  <i class="fas fa-clipboard-list icon"></i>
                   <span>Inventario</span>
                 </a>
               </li>
               <li class="{% if request.path == '/proveedores/' %}active{% endif %}">
                 <a href="{% url 'proveedores' %}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                        <path d="M1 8h11v10H1z"></path>
-                        <path d="M12 8h6l4 4v6h-10V8z"></path>
-                        <circle cx="5" cy="18" r="2"></circle>
-                        <circle cx="17" cy="18" r="2"></circle>
-                        <path d="M15 18h-6"></path>
-                        <path d="M1 12h11"></path>
-                        <path d="M4 15h3"></path>
-                      </svg>
+                  <i class="fas fa-truck icon"></i>
                   <span>Proveedores</span>
                 </a>
               </li>
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        </div>
+        <div class="sidebar-footer">
+          <a href="#">
+            <i class="fas fa-cog icon"></i>
+            <span>Configuración</span>
+          </a>
+          <a href="#" class="user-profile">
+            <div class="avatar">
+              <span>JD</span>
+            </div>
+            <span>Juan Díaz</span>
+          </a>
+        </div>
+      </aside>
+  
+      <!-- Main Content -->
+      <div class="main-content">
+        {% block content %}{% endblock %}  
       </div>
-      <div class="sidebar-footer">
-        <a href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
-          <span>Configuración</span>
-        </a>
-        <a href="#" class="user-profile">
-          <div class="avatar">
-            <span>JD</span>
-          </div>
-          <span>Juan Díaz</span>
-        </a>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-     <div style="margin-left: 20%;">
-      {% block content %}{% endblock %}  
-     </div>
-    
-
-  <script>
-    // Simple JavaScript for sidebar toggle functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const sidebarToggle = document.getElementById('sidebarToggle');
-      const menuToggle = document.getElementById('menuToggle');
-      const sidebar = document.querySelector('.sidebar');
-      const appContainer = document.querySelector('.app-container');
-      
-      // Desktop sidebar toggle
-      if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function() {
-          appContainer.classList.toggle('sidebar-collapsed');
-        });
-      }
-      
-      // Mobile menu toggle
-      if (menuToggle) {
-        menuToggle.addEventListener('click', function() {
-          appContainer.classList.toggle('sidebar-mobile-open');
-        });
-      }
-    });
-  </script>
-</body>
-</html>
+    </div>
+  
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const logoExpand = document.getElementById('logoExpand');
+        const appContainer = document.querySelector('.app-container');
+        
+        // Toggle sidebar
+        if (sidebarToggle) {
+          sidebarToggle.addEventListener('click', function() {
+            appContainer.classList.toggle('sidebar-collapsed');
+          });
+        }
+        
+        // Expandir sidebar al hacer clic en el logo
+        if (logoExpand) {
+          logoExpand.addEventListener('click', function() {
+            appContainer.classList.remove('sidebar-collapsed');
+          });
+        }
+      });
+    </script>
+  </body>
+  </html>

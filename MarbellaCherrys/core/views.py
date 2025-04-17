@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from core.models import Huerto
 from .forms import HuertoForm, PlantacionFormSet
 
@@ -18,8 +19,13 @@ def proveedores(request):
     return render(request, 'core/proveedores.html')
 
 def huertos(request):
-    huertos = Huerto.objects.all()
-    return render(request, 'core/huertos.html' , {'huertos': huertos})
+    huertos_list = Huerto.objects.all().prefetch_related('plantaciones')
+
+    paginator = Paginator(huertos_list, 15)
+    page_number = request.GET.get('page')
+    huertos = paginator.get_page(page_number)
+    
+    return render(request, 'core/huertos.html', {'huertos': huertos})
 
 def huerto_list_create(request):
     huertos = Huerto.objects.prefetch_related('plantaciones').all()
