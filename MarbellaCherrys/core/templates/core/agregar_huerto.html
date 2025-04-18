@@ -150,4 +150,56 @@ function eliminarPlantacion(btn) {
     }
 }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('huerto-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (!validateHectareas()) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Validar en tiempo real cuando cambian los inputs
+        document.querySelectorAll('input[name*="-hcta_total"], input[name="hcta_total"]').forEach(input => {
+            input.addEventListener('change', validateHectareas);
+        });
+    }
+
+    function validateHectareas() {
+        const hctaTotal = parseFloat(document.querySelector('input[name="hcta_total"]').value) || 0;
+        let totalPlantaciones = 0;
+        let isValid = true;
+
+        // Calcular suma de plantaciones
+        document.querySelectorAll('input[name*="-hcta_total"]').forEach(input => {
+            const formGroup = input.closest('.plantacion-form');
+            // Verificar si la plantación no está marcada para eliminar
+            if (!formGroup.querySelector('input[name*="-DELETE"]:checked')) {
+                totalPlantaciones += parseFloat(input.value) || 0;
+            }
+        });
+
+        // Validar
+        if (totalPlantaciones > hctaTotal) {
+            alert(`Error: La suma de hectáreas de plantaciones (${totalPlantaciones}) no puede exceder las hectáreas totales del huerto (${hctaTotal})`);
+            isValid = false;
+        }
+
+        // Mostrar advertencia visual
+        const warningElement = document.getElementById('hectareas-warning');
+        if (warningElement) {
+            if (totalPlantaciones > hctaTotal) {
+                warningElement.style.display = 'block';
+                warningElement.textContent = `Suma de plantaciones: ${totalPlantaciones} (excede el total)`;
+            } else {
+                warningElement.style.display = 'none';
+            }
+        }
+
+        return isValid;
+    }
+});
+</script>
 {% endblock %}

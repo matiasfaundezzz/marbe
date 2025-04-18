@@ -56,7 +56,7 @@
                         {% for plantacion in huerto.plantaciones.all %}
                         <tr>
                             <td class="text-center">{{ plantacion.variedad }}</td>
-                            <td class="text-center"><span class="badge badge-pill badge-accent">{{ huerto.hcta_total }} ha</span></td>
+                            <td class="text-center"><span class="badge badge-pill badge-accent">{{ plantacion.hcta_total }} ha</span></td>
                         </tr>
                         {% endfor %}
                     </tbody>

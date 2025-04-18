@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
-from core.models import Huerto, Plantacion
-from .forms import HuertoForm, PlantacionFormSet
+from django.views.generic import ListView
+from core.models import Huerto, Plantacion, Insumo, Proveedor
+from .forms import HuertoForm, PlantacionFormSet, InsumoForm
 
 def index(request):
     return render(request, 'core/index.html')
@@ -73,3 +74,57 @@ def editar_huerto(request, huerto_id):
         "huerto_form": huerto_form,
         "plantacion_formset": plantacion_formset,
     })
+
+def eliminar_huerto(request, huerto_id):
+    huerto = get_object_or_404(Huerto, id=huerto_id)
+    if request.method == 'POST':
+        huerto.delete()
+        return redirect('huertos')
+    
+    return render(request, 'core/huerto_confirm_delete.html', {'huerto': huerto})
+
+class InsumoListView(ListView):
+    model = Insumo
+    template_name = 'core/insumo_list.html'
+    context_object_name = 'insumos'
+    paginate_by = 15
+
+    def get_queryset(self):
+        return Insumo.objects.select_related('proveedor').all()
+
+def crear_insumo(request):
+    if request.method == 'POST':
+        form = InsumoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('insumos')
+    else:
+        form = InsumoForm()
+    
+    return render(request, 'core/insumo_form.html', {
+        'form': form,
+        'titulo': 'Nuevo Insumo'
+    })
+
+def editar_insumo(request, insumo_id):
+    insumo = get_object_or_404(Insumo, id=insumo_id)
+    if request.method == 'POST':
+        form = InsumoForm(request.POST, instance=insumo)
+        if form.is_valid():
+            form.save()
+            return redirect('insumos')
+    else:
+        form = InsumoForm(instance=insumo)
+    
+    return render(request, 'core/insumo_form.html', {
+        'form': form,
+        'titulo': f'Editar Insumo: {insumo.nombre}'
+    })
+
+def eliminar_insumo(request, insumo_id):
+    insumo = get_object_or_404(Insumo, id=insumo_id)
+    if request.method == 'POST':
+        insumo.delete()
+        return redirect('maestroinsumo')
+    
+    return render(request, 'core/insumo_confirm_delete.html', {'insumo': insumo})

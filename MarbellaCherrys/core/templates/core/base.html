@@ -48,8 +48,8 @@
                   <span>Huertos</span>
                 </a>
               </li>
-              <li class="{% if request.path == '/maestroinsumo/' %}active{% endif %}">
-                <a href="{% url 'maestroinsumo' %}">
+              <li class="{% if request.path == '/insumos/' %}active{% endif %}">
+                <a href="{% url 'insumos' %}">
                   <i class="fas fa-boxes icon"></i>
                   <span>Maestros Insumos</span>
                 </a>
@@ -58,12 +58,6 @@
                 <a href="{% url 'maestroherrero' %}">
                   <i class="fas fa-tools icon"></i>
                   <span>Maestros Herrero</span>
-                </a>
-              </li>
-              <li class="{% if request.path == '/inventario/' %}active{% endif %}">
-                <a href="{% url 'inventario' %}">
-                  <i class="fas fa-clipboard-list icon"></i>
-                  <span>Inventario</span>
                 </a>
               </li>
               <li class="{% if request.path == '/proveedores/' %}active{% endif %}">

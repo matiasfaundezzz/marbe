@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-import datetime
-
+from datetime import date
 
 class Maestro(models.Model):
     ESTADOS_CHOICES = [
@@ -78,16 +77,39 @@ class Proveedor(models.Model):
 
 
 class Insumo(models.Model):
+    ETIQUETA_CHOICES = [
+        ('verde', 'Verde'),
+        ('azul', 'Azul'),
+        ('amarilo', 'Amarillo'),
+        ('rojo', 'Rojo'),
+    ]
     codigo = models.CharField(max_length=50, unique=True)
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
-    capacidad = models.FloatField()
+    tipo = models.CharField(max_length=50)
     precio = models.IntegerField()
+    stock = models.IntegerField()
+    etiqueta = models.CharField(max_length=10, choices=ETIQUETA_CHOICES, default='Verde')
+    capacidad = models.FloatField(null=True, blank=True)
     carencia = models.IntegerField()
-    proveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE,related_name='proveedores')
+    proveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE,related_name='proveedoresIn')
 
     def __str__(self):
-        return f"{self.codigo} - {self.descripcion}"
+        return f"{self.codigo} - {self.nombre}"
+    
+class InsumoHerreria(models.Model):
+    ESTADOS_CHOICES = [
+        ('operativo', 'Operativo'),
+        ('intivo', 'Inoperativo'),
+    ]
+    nombre = models.CharField(max_length=100)
+    estado = models.CharField(max_length=10, choices=ESTADOS_CHOICES, default='Activo')
+    operador = models.CharField(max_length=100)
+    precio = models.IntegerField(null=True, blank=True)
+    last_use = models.DateField(default=date.today,)
+    proveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE,related_name='proveedoresHe')
+
+    def __str__(self):
+        return f"{self.estado} - {self.nombre}"
 
 class InventarioInsumo(models.Model):
     huerto = models.ForeignKey(Huerto, on_delete=models.CASCADE)
