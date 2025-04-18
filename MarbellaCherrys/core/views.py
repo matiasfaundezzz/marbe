@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.generic import ListView
-from core.models import Huerto, Plantacion, Insumo, Proveedor
+from core.models import Huerto, Plantacion, Insumo, Proveedor, InsumoHerreria
 from .forms import HuertoForm, PlantacionFormSet, InsumoForm
 
 def index(request):
@@ -128,3 +128,49 @@ def eliminar_insumo(request, insumo_id):
         return redirect('maestroinsumo')
     
     return render(request, 'core/insumo_confirm_delete.html', {'insumo': insumo})
+
+class InsumoHerreriaListView(ListView):
+    model = InsumoHerreria
+    template_name = 'core/herrero_list.html'
+    context_object_name = 'maestroherrero'
+    paginate_by = 15
+
+    def get_queryset(self):
+        return InsumoHerreria.objects.select_related('proveedor').all()
+
+def crear_herrero(request):
+    if request.method == 'POST':
+        form = HerreroForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('maestroherrero')
+    else:
+        form = HerreroForm()
+    
+    return render(request, 'core/herrero_form.html', {
+        'form': form,
+        'titulo': 'Nuevo Herrero'
+    })
+
+def editar_herrero(request, insumoherreria_id):
+    herrero = get_object_or_404(InsumoHerreria, id=insumoherreria_id)
+    if request.method == 'POST':
+        form = HerreroForm(request.POST, instance=herrero)
+        if form.is_valid():
+            form.save()
+            return redirect('maestroherrero')
+    else:
+        form = HerreroForm(instance=herrero)
+    
+    return render(request, 'core/herrero_form.html', {
+        'form': form,
+        'titulo': f'Editar Herrero: {herrero.nombre}'
+    })
+
+def eliminar_herrero(request, insumoherreria_id):
+    herrero = get_object_or_404(InsumoHerreria, id=insumoherreria_id)
+    if request.method == 'POST':
+        herrero.delete()
+        return redirect('maestroherrero')
+    
+    return render(request, 'core/herrero_confirm_delete.html', {'herrero': herrero})

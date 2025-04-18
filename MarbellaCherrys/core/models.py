@@ -80,18 +80,27 @@ class Insumo(models.Model):
     ETIQUETA_CHOICES = [
         ('verde', 'Verde'),
         ('azul', 'Azul'),
-        ('amarilo', 'Amarillo'),
+        ('amarillo', 'Amarillo'),
         ('rojo', 'Rojo'),
     ]
+
+    TIPO_CHOICES = [
+        ('fertilizante', 'Fertilizante'),
+        ('herbicida', 'Herbicida'),
+        ('fungicida', 'Fungicida'),
+        ('insecticida', 'Insecticida'),
+        ('otro', 'Otro'),
+    ]
+
     codigo = models.CharField(max_length=50, unique=True)
     nombre = models.CharField(max_length=100)
-    tipo = models.CharField(max_length=50)
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='Fertilizante')
     precio = models.IntegerField()
     stock = models.IntegerField()
     etiqueta = models.CharField(max_length=10, choices=ETIQUETA_CHOICES, default='Verde')
     capacidad = models.FloatField(null=True, blank=True)
     carencia = models.IntegerField()
-    proveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE,related_name='proveedoresIn')
+    proveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE,related_name='proveedoresIn', null=True, blank=True)
 
     def __str__(self):
         return f"{self.codigo} - {self.nombre}"
