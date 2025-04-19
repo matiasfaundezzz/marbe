@@ -1,5 +1,6 @@
 from django.forms import modelform_factory, inlineformset_factory
-from core.models import Huerto, Plantacion, Insumo, Proveedor
+from core.models import Huerto, Plantacion, Insumo, Proveedor, InsumoHerreria
+from django.forms.widgets import DateInput
 from django import forms
 
 HuertoForm = modelform_factory(Huerto, fields=["nombre", "hcta_total", "nombre_ubicacion", "ubicacion"])
@@ -14,13 +15,21 @@ PlantacionFormSet = inlineformset_factory(
 class InsumoForm(forms.ModelForm):
     class Meta:
         model = Insumo
-        fields = ['codigo', 'nombre', 'tipo', 'precio', 'stock', 'etiqueta', 'capacidad', 'carencia', 'proveedor']
+        fields = ['nombre', 'tipo', 'precio', 'stock', 'etiqueta', 'capacidad', 'carencia', 'proveedor']
+
+
+
+class HerreroForm(forms.ModelForm):
+    class Meta:
+        model = InsumoHerreria
+        fields = ['nombre', 'estado', 'operador', 'precio', 'last_use','proveedor']
         widgets = {
-            'descripcion': forms.Textarea(attrs={'rows': 3}),
+            'last_use': DateInput(
+                attrs={
+                    'type': 'date',  # Input type date para navegadores modernos
+                    'class': 'form-control datepicker',
+                },
+                format='%Y-%m-%d'  # Formato que espera el input date
+            ),
         }
 
-    def clean_codigo(self):
-        codigo = self.cleaned_data['codigo']
-        if Insumo.objects.filter(codigo=codigo).exclude(id=self.instance.id if self.instance else None).exists():
-            raise forms.ValidationError("Este código ya está en uso.")
-        return codigo

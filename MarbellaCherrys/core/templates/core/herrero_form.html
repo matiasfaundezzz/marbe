@@ -2,8 +2,8 @@
 {% block content %}
 <div class="dashboard-container">
     <div class="dashboard-header">
-        <h2 class="dashboard-title">{{ titulo }}</h2>
-        <a href="{% url 'insumos' %}" class="btn btn-secondary">
+        <h2 class="dashboard-title">{{titulo}}</h2>
+        <a href="{% url 'maestroherrero' %}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Volver
         </a>
     </div>
@@ -14,39 +14,24 @@
                 {% csrf_token %}
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="{{ form.codigo.id_for_label }}">Código:</label>
-                        {{ form.codigo }}
-                        {% if form.codigo.errors %}
-                        <div class="error-message">{{ form.codigo.errors.as_text }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="form-group">
                         <label for="{{ form.nombre.id_for_label }}">Nombre:</label>
                         {{ form.nombre }}
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.tipo.id_for_label }}">Tipo:</label>
-                        {{ form.tipo }}
+                        <label for="{{ form.estado.id_for_label }}">Estado:</label>
+                        {{ form.estado }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.operador.id_for_label }}">Operador:</label>
+                        {{ form.operador }}
                     </div>
                     <div class="form-group">
                         <label for="{{ form.precio.id_for_label }}">Precio:</label>
                         {{ form.precio }}
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.stock.id_for_label }}">Stock:</label>
-                        {{ form.stock }}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.etiqueta.id_for_label }}">Etiqueta:</label>
-                        {{ form.etiqueta }}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.capacidad.id_for_label }}">Capacidad:</label>
-                        {{ form.capacidad }}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.carencia.id_for_label }}">Carencia (días):</label>
-                        {{ form.carencia }}
+                        <label for="{{ form.last_use.id_for_label }}">Ultimo Uso:</label>
+                        {{ form.last_use }}
                     </div>
                     <div class="form-group">
                         <label for="{{ form.proveedor.id_for_label }}">Proveedor:</label>

@@ -92,7 +92,6 @@ class Insumo(models.Model):
         ('otro', 'Otro'),
     ]
 
-    codigo = models.CharField(max_length=50, unique=True)
     nombre = models.CharField(max_length=100)
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='Fertilizante')
     precio = models.IntegerField()
@@ -103,15 +102,15 @@ class Insumo(models.Model):
     proveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE,related_name='proveedoresIn', null=True, blank=True)
 
     def __str__(self):
-        return f"{self.codigo} - {self.nombre}"
+        return f"{self.nombre}"
     
 class InsumoHerreria(models.Model):
     ESTADOS_CHOICES = [
         ('operativo', 'Operativo'),
-        ('intivo', 'Inoperativo'),
+        ('inoperativo', 'Inoperativo'),
     ]
     nombre = models.CharField(max_length=100)
-    estado = models.CharField(max_length=10, choices=ESTADOS_CHOICES, default='Activo')
+    estado = models.CharField(max_length=11, choices=ESTADOS_CHOICES, default='Operativo')
     operador = models.CharField(max_length=100)
     precio = models.IntegerField(null=True, blank=True)
     last_use = models.DateField(default=date.today,)

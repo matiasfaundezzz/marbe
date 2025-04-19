@@ -12,7 +12,7 @@
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-                <p>¿Estás seguro que deseas eliminar <strong>{{ insumo.nombre }}</strong> ({{ insumo.codigo }})?</p>
+                <p>¿Estás seguro que deseas eliminar <strong>{{ herrero.nombre }}</strong> ({{ herrero.id }})?</p>
                 <p class="text-danger">Esta acción no se puede deshacer.</p>
                 
                 <div class="form-footer">

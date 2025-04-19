@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.generic import ListView
 from core.models import Huerto, Plantacion, Insumo, Proveedor, InsumoHerreria
-from .forms import HuertoForm, PlantacionFormSet, InsumoForm
+from .forms import HuertoForm, PlantacionFormSet, InsumoForm, HerreroForm
 
 def index(request):
     return render(request, 'core/index.html')
@@ -132,11 +132,10 @@ def eliminar_insumo(request, insumo_id):
 class InsumoHerreriaListView(ListView):
     model = InsumoHerreria
     template_name = 'core/herrero_list.html'
-    context_object_name = 'maestroherrero'
+    context_object_name = 'herreros'
     paginate_by = 15
-
     def get_queryset(self):
-        return InsumoHerreria.objects.select_related('proveedor').all()
+        return InsumoHerreria.objects.all()
 
 def crear_herrero(request):
     if request.method == 'POST':

@@ -27,7 +27,6 @@
         <table class="modern-table">
             <thead>
                 <tr>
-                    <th>Código</th>
                     <th>Nombre</th>
                     <th>Tipo</th>
                     <th>Precio</th>
@@ -42,7 +41,6 @@
             <tbody>
                 {% for insumo in insumos %}
                 <tr>
-                    <td>{{ insumo.codigo }}</td>
                     <td>{{ insumo.nombre }}</td>
                     <td>
                         <span class="tipo-{{ insumo.tipo }}">{{ insumo.get_tipo_display }}</span>
@@ -68,7 +66,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="10" class="text-center py-4">
+                    <td colspan="9" class="text-center py-4">
                         <div class="empty-state">
                             <i class="fas fa-box-open empty-icon"></i>
                             <h4>No hay insumos registrados</h4>

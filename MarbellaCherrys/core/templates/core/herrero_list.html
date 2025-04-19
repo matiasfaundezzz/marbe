@@ -2,24 +2,15 @@
 {% block content %}
 <style>
     /* Colores para tipos */
-    .tipo-fertilizante {background-color: #28a745; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #fff;}  
-    .tipo-herbicida {background-color: #dc3545; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #fff;}  
-    .tipo-fungicida { background-color: #6610f2; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #fff;}    
-    .tipo-insecticida { background-color: #fd7e14; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #fff;}   
-    .tipo-otro { background-color: #6c757d; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #fff;}      
-
-    /* Colores para etiquetas */
-    .etiqueta-verde { background-color: #d4edda; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #155724; }
-    .etiqueta-amarillo { background-color: #fff3cd; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #856404; }
-    .etiqueta-azul { background-color: #cce5ff; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #004085; }
-    .etiqueta-rojo { background-color: #f8d7da; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #721c24; }
+    .estado-operativo {background-color: #28a745; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #fff;}  
+    .estado-inoperativo {background-color: #dc3545; padding: 2px 6px 2px; border-radius: 4px; font-size: 14px; color: #fff;}  
     
 </style>
 <div class="dashboard-container">
     <div class="dashboard-header">
-        <h2>Insumos</h2>
-        <a href="{% url 'crear_insumo' %}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Nuevo Insumo
+        <h2>Insumos Herreria</h2>
+        <a href="{% url 'crear_herrero' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nuevo Insumo de Herreria
         </a>
     </div>
 
@@ -27,40 +18,32 @@
         <table class="modern-table">
             <thead>
                 <tr>
-                    <th>Código</th>
                     <th>Nombre</th>
-                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Operador</th>
                     <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Etiqueta</th>
-                    <th>Capacidad</th>
-                    <th>Carencia</th>
+                    <th>Ultimo Uso</th>
                     <th>Proveedor</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                {% for insumo in insumos %}
+                {% for herrero in herreros %}
                 <tr>
-                    <td>{{ insumo.codigo }}</td>
-                    <td>{{ insumo.nombre }}</td>
+                    <td>{{ herrero.nombre }}</td>
                     <td>
-                        <span class="tipo-{{ insumo.tipo }}">{{ insumo.get_tipo_display }}</span>
+                        <span class="estado-{{ herrero.estado }}">{{ herrero.get_estado_display }}</span>
                     </td>
-                    <td>${{ insumo.precio|floatformat:0 }}</td>
-                    <td>{{ insumo.stock }}</td>
-                    <td>
-                        <span class="etiqueta-{{ insumo.etiqueta }}">{{ insumo.get_etiqueta_display }}</span>
-                    </td>
-                    <td>{{ insumo.capacidad }}</td>
-                    <td>{{ insumo.carencia }} días</td>
-                    <td>{{ insumo.proveedor.nombre_empresa|default:"-" }}</td>
+                    <td>{{ herrero.operador }}</td>
+                    <td>${{ herrero.precio|floatformat:0 }}</td>
+                    <td>{{ herrero.last_use }}</td>
+                    <td>{{ herrero.proveedor.nombre_empresa|default:"-" }}</td>
                     <td class="text-center">
                         <div class="action-buttons">
-                            <a href="{% url 'editar_insumo' insumo.id %}" class="btn btn-sm btn-edit" title="Editar">
+                            <a href="{% url 'editar_herrero' herrero.id %}" class="btn btn-sm btn-edit" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="{% url 'eliminar_insumo' insumo.id %}" class="btn btn-sm btn-danger" title="Eliminar">
+                            <a href="{% url 'eliminar_herrero' herrero.id %}" class="btn btn-sm btn-danger" title="Eliminar">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </div>
@@ -68,13 +51,13 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="10" class="text-center py-4">
+                    <td colspan="7" class="text-center py-4">
                         <div class="empty-state">
                             <i class="fas fa-box-open empty-icon"></i>
-                            <h4>No hay insumos registrados</h4>
-                            <p>Comienza agregando tu primer insumo</p>
-                            <a href="{% url 'crear_insumo' %}" class="btn btn-primary mt-2">
-                                <i class="fas fa-plus"></i> Crear Insumo
+                            <h4>No hay insumos de herreria registrados</h4>
+                            <p>Comienza agregando tu primer insumo de herreria</p>
+                            <a href="{% url 'crear_herrero' %}" class="btn btn-primary mt-2">
+                                <i class="fas fa-plus"></i> Crear Insumo de Herreria
                             </a>
                         </div>
                     </td>
