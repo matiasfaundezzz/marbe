@@ -1,0 +1,75 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2 class="dashboard-title">Detalle del Huerto: {{ huerto.nombre }}</h2>
+        <a href="{% url 'huertos' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a Huertos
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="detail-grid">
+                <div class="detail-group">
+                    <label>Nombre:</label>
+                    <p>{{ huerto.nombre }}</p>
+                </div>
+                <div class="detail-group">
+                    <label>Hectáreas totales:</label>
+                    <span class="badge badge-pill badge-accent">{{ huerto.hcta_total }} ha</span>
+                </div>
+                <div class="detail-group">
+                    <label>Nombre de ubicación:</label>
+                    <p>{{ huerto.nombre_ubicacion|default:"No especificado" }}</p>
+                </div>
+                <div class="detail-group">
+                    <label>Ubicación:</label>
+                    {% if huerto.ubicacion %}
+                    <a href="{{ huerto.ubicacion }}" target="_blank" class="location-link">
+                        <i class="fas fa-map-marker-alt"></i> Ver en mapa
+                    </a>
+                    {% else %}
+                    <p>No especificada</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Plantaciones</h3>
+        </div>
+        <div class="card-body">
+            {% if huerto.plantaciones.all %}
+            <div class="card table-responsive">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>Variedad</th>
+                            <th class="text-right">Hectáreas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for plantacion in huerto.plantaciones.all %}
+                        <tr>
+                            <td class="text-center">{{ plantacion.variedad }}</td>
+                            <td class="text-center"><span class="badge badge-pill badge-accent">{{ plantacion.hcta_total }} ha</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-seedling empty-icon"></i>
+                <h4>No hay plantaciones registradas</h4>
+                <p>Agrega la primera plantación a este huerto</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

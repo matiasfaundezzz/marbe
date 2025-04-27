@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2 class="dashboard-title">Confirmar Eliminación</h2>
+        <a href="{% url 'insumos' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <p>¿Estás seguro que deseas eliminar el insumo <strong>{{ insumo.nombre }}</strong> ({{ insumo.id }})?</p>
+                <p class="text-danger">Esta acción no se puede deshacer.</p>
+                
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Confirmar Eliminación
+                    </button>
+                    <a href="{% url 'insumos' %}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

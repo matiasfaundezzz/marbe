@@ -1,0 +1,165 @@
+{% extends 'core/base.html' %} 
+
+{% block content %}
+<style>
+    /* Oculta el checkbox y su label */
+    input[name$="-DELETE"], label[for$="-DELETE"] {
+        display: none;
+    }
+</style>
+<div class="huerto-form-container">
+    <div class="dashboard-header">
+        <h2 class="dashboard-title">Editar Huerto: {{ huerto.nombre }}</h2>
+        <a href="{% url 'huertos' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a Huertos
+        </a>
+    </div>
+    <form method="post" id="huerto-form" class="modern-form">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <h2 class="section-title">Datos del Huerto</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Nombre:</label>
+                    {{ huerto_form.nombre }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Hcta total:</label>
+                    {{ huerto_form.hcta_total }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nombre ubicación:</label>
+                    {{ huerto_form.nombre_ubicacion }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ubicación:</label>
+                    {{ huerto_form.ubicacion }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="section-title">Plantaciones</h2>
+            {{ plantacion_formset.management_form }}
+            <div id="plantaciones-forms">
+                {% for form in plantacion_formset %}
+                <div class="plantacion-item {% if not forloop.first %}with-separator{% endif %}">
+                    {{ form.id }}  
+                    <div class="plantacion-grid">
+                        <div class="form-group">
+                            <label class="form-label">Variedad:</label>
+                            {{ form.variedad }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hcta total:</label>
+                            {{ form.hcta_total }}
+                        </div>
+                        {% if form.instance.pk %}
+                            {{ form.DELETE }}  
+                        {% endif %}
+                    </div>
+                    {% if not forloop.first or plantacion_formset.total_form_count > 1 %}
+                    <div class="form-actions" style="margin-bottom: 20px;">
+                        <button type="button" class="btn-delete" onclick="eliminarPlantacion(this)">
+                            <i class="fas fa-trash"></i> Eliminar esta plantación
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-actions">
+                <button type="button" id="add-plantacion" class="btn-secondary">
+                    <i class="fas fa-plus"></i> Agregar otra plantación
+                </button>
+            </div>
+        </div>
+        <div class="form-actions main-actions">
+            <a href="{% url 'huertos' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver a Huertos
+            </a>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+        </div>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Función para actualizar índices
+    function updateFormIndices() {
+        let totalForms = $('#plantaciones-forms .plantacion-item').length;
+        $('#id_plantaciones-TOTAL_FORMS').val(totalForms);
+        
+        $('#plantaciones-forms .plantacion-item').each(function(i) {
+            $(this).find(':input').each(function() {
+                let name = $(this).attr('name').replace(/-\d+-/, '-' + i + '-');
+                let id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id});
+            });
+            
+            // Actualizar el checkbox DELETE si existe
+            let deleteCheckbox = $(this).find('input[type="checkbox"][name$="-DELETE"]');
+            if (deleteCheckbox.length) {
+                let newName = deleteCheckbox.attr('name').replace(/-\d+-/, '-' + i + '-');
+                deleteCheckbox.attr('name', newName);
+            }
+        });
+    }
+
+    // Agregar nueva plantación
+    $('#add-plantacion').click(function() {
+        let formIdx = $('#id_plantaciones-TOTAL_FORMS').val();
+        let newForm = $('.plantacion-item:first').clone(true);
+        
+        // Limpiar valores y IDs
+        newForm.find('input, select').val('');
+        newForm.find('[name$="-id"]').remove();
+        newForm.find('[name$="-DELETE"]').remove();
+        
+        // Agregar botón de eliminar
+        if (!newForm.find('.delete-btn').length) {
+            newForm.append(`
+                <div class="plantacion-actions">
+                    <button type="button" class="delete-btn" onclick="eliminarPlantacion(this)">
+                        <span class="icon">×</span> Eliminar esta plantación
+                    </button>
+                </div>
+            `);
+        }
+        
+        // Asegurar que tenga separador
+        newForm.addClass('with-separator');
+        
+        // Agregar al contenedor
+        $('#plantaciones-forms').append(newForm);
+        updateFormIndices();
+    });
+});
+
+function eliminarPlantacion(btn) {
+    let formItem = $(btn).closest('.plantacion-item');
+    let deleteCheckbox = formItem.find('input[type="checkbox"][name$="-DELETE"]');
+    
+    if (deleteCheckbox.length) {
+        // Para plantaciones existentes: marcar para eliminación
+        deleteCheckbox.prop('checked', true);
+        formItem.hide();
+    } else {
+        // Para nuevas plantaciones: eliminar directamente
+        if ($('.plantacion-item:visible').length > 1) {
+            formItem.remove();
+            updateFormIndices();
+            
+            // Asegurar que el primer item no tenga botón de eliminar
+            $('.plantacion-item:first .plantacion-actions').remove();
+            $('.plantacion-item:first').removeClass('with-separator');
+        } else {
+            alert('Debe haber al menos una plantación.');
+        }
+    }
+}
+</script>
+{% endblock %}
